@@ -1,7 +1,7 @@
 import { Notify } from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { getBreeds, getPhotos, getPhotosAxios } from './api';
+import { getPhotos } from './api';
 import { createMarkup } from './create-markup';
 
 const searchForm = document.querySelector('.js-search-form');
@@ -13,7 +13,6 @@ let totalPages = 0;
 let query = '';
 
 let observer = new IntersectionObserver(loadMore, {
-  // rootMargin: '800px',
   rootMargin: '470px',
   threshold: 1.0,
 });
@@ -42,13 +41,13 @@ async function handleSubmit(event) {
     observer.observe(targetElem);
     changeStatusObserver();
   } catch (error) {
-    Notify.failure('Sorry, something wrong. Please try again.');
+    Notify.failure('Sorry, something went wrong. Please try again.');
     console.log(error.name);
     console.log(error.message);
   }
 }
 
-async function loadMore(entries) {
+function loadMore(entries) {
   changeStatusObserver();
 
   entries.forEach(async entry => {
@@ -68,7 +67,7 @@ async function loadMore(entries) {
           });
         }, 500);
       } catch (error) {
-        Notify.failure('Sorry, something wrong. Please try again.');
+        Notify.failure('Sorry, something went wrong. Please try again.');
         console.log(error.name);
         console.log(error.message);
       }
@@ -81,11 +80,4 @@ function changeStatusObserver() {
     observer.unobserve(targetElem);
     Notify.info(`We're sorry, but you've reached the end of search results.`);
   }
-}
-
-function hideElement(elem) {
-  elem.classList.add('is-hidden');
-}
-function showElement(elem) {
-  elem.classList.remove('is-hidden');
 }
